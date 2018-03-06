@@ -12,33 +12,9 @@ import com.lightbend.lagom.scaladsl.persistence.{EventStreamElement, PersistentE
   */
 class KamonlagomreproServiceImpl(persistentEntityRegistry: PersistentEntityRegistry) extends KamonlagomreproService {
 
+  private val TRACE_KEY = Key
+
   override def hello(id: String) = ServiceCall { _ =>
-    // Look up the kamon-lagom-repro entity for the given ID.
-    val ref = persistentEntityRegistry.refFor[KamonlagomreproEntity](id)
-
-    // Ask the entity the Hello command.
-    ref.ask(Hello(id))
-  }
-
-  override def useGreeting(id: String) = ServiceCall { request =>
-    // Look up the kamon-lagom-repro entity for the given ID.
-    val ref = persistentEntityRegistry.refFor[KamonlagomreproEntity](id)
-
-    // Tell the entity to use the greeting message specified.
-    ref.ask(UseGreetingMessage(request.message))
-  }
-
-
-  override def greetingsTopic(): Topic[api.GreetingMessageChanged] =
-    TopicProducer.singleStreamWithOffset {
-      fromOffset =>
-        persistentEntityRegistry.eventStream(KamonlagomreproEvent.Tag, fromOffset)
-          .map(ev => (convertEvent(ev), ev.offset))
-    }
-
-  private def convertEvent(helloEvent: EventStreamElement[KamonlagomreproEvent]): api.GreetingMessageChanged = {
-    helloEvent.event match {
-      case GreetingMessageChanged(msg) => api.GreetingMessageChanged(helloEvent.entityId, msg)
-    }
+    Kamon.
   }
 }

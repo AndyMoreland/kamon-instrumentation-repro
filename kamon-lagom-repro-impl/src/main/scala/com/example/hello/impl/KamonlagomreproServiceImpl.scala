@@ -22,7 +22,7 @@ class KamonlagomreproServiceImpl(
   private val TRACE_KEY = Key.broadcast("trace_key", "default value")
 
   override def hello(id: String) = ServiceCall { _ =>
-    Kamon.withContextKey(TRACE_KEY, "non default value") {
+    Kamon.withContextKey(TRACE_KEY, id) {
       logger.info("Inside withContextKey")
       logger.info("Outside future: " + Kamon.currentContext().get(TRACE_KEY))
       Future {

@@ -22,5 +22,6 @@ trait KamonlagomreproService extends Service {
       .withCalls(
         pathCall("/api/hello/:id", hello _)
       )
+      .withAutoAcl(true)
   }
 }
